@@ -6,29 +6,111 @@ class TasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Task task = Task(
-      taskText: 'This is a test task',
-      taskDueDate: DateTime.now(),
-      taskDueTime: TimeOfDay.now(),
-    );
+    List<Task> task = [
+      Task(
+        taskText: 'This is the first test task',
+        taskDueDateAndTime: DateTime(2021, 6, 24, 10, 15),
+        taskCompleted: false,
+      ),
+      Task(
+        taskText: 'This is the second test task',
+        taskDueDateAndTime: DateTime(2021, 6, 25, 22, 26),
+        taskCompleted: true,
+      ),
+      Task(
+        taskText: 'This is the third test task',
+        taskDueDateAndTime: DateTime(2021, 6, 25, 23, 59),
+        taskCompleted: false,
+      ),
+      Task(
+        taskText: 'This is the forth test task',
+        taskDueDateAndTime: DateTime(2021, 9, 12, 9, 30),
+        taskCompleted: false,
+      ),
+      Task(
+        taskText: 'This is the fifth test task',
+        taskDueDateAndTime: DateTime(2021, 9, 12, 9, 30),
+        taskCompleted: false,
+      ),
+      Task(
+        taskText: 'This is the sixth test task',
+        taskDueDateAndTime: DateTime(2021, 9, 12, 9, 30),
+        taskCompleted: false,
+      ),
+      Task(
+        taskText: 'This is the seventh test task',
+        taskDueDateAndTime: DateTime(2021, 9, 12, 9, 30),
+        taskCompleted: false,
+      ),
+      Task(
+        taskText: 'This is the eight test task',
+        taskDueDateAndTime: DateTime(2021, 9, 12, 9, 30),
+        taskCompleted: false,
+      ),
+      Task(
+        taskText: 'This is the ninth test task',
+        taskDueDateAndTime: DateTime(2021, 9, 12, 9, 30),
+        taskCompleted: false,
+      ),
+      Task(
+        taskText: 'This is the tenth test task',
+        taskDueDateAndTime: DateTime(2021, 9, 12, 9, 30),
+        taskCompleted: true,
+      ),
+      Task(
+        taskText: 'This is the eleventh test task',
+        taskDueDateAndTime: DateTime(2021, 9, 12, 9, 30),
+        taskCompleted: false,
+      ),
+      Task(
+        taskText: 'This is the twelfth test task',
+        taskDueDateAndTime: DateTime(2021, 9, 12, 9, 30),
+        taskCompleted: false,
+      ),
+    ];
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print('new task added');
+        },
+        child: Icon(Icons.add),
+      ),
       body: SafeArea(
-        child: Column(
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            Text('List of tasks will go here.'),
-            Card(
-              color: Colors.blue,
-              child: ListTile(
-                subtitle: Text(
-                  task.description(),
-                ),
-                title: Text(
-                  'This is the Title text',
-                ),
-              ),
-            )
-          ],
+        child: ListView.builder(
+          itemCount: task.length,
+          itemBuilder: (BuildContext context, int index) {
+            return TaskCard(
+              cardTaskDescription: task[index].description(),
+              cardDateAndTimeString: task[index].dueDateAndTime(),
+              cardStatusColor: task[index].statusColor(),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class TaskCard extends StatelessWidget {
+  TaskCard(
+      {required this.cardTaskDescription,
+      required this.cardDateAndTimeString,
+      required this.cardStatusColor});
+
+  Color cardStatusColor;
+  String cardDateAndTimeString;
+  String cardTaskDescription;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: cardStatusColor,
+      child: ListTile(
+        subtitle: Text(
+          cardDateAndTimeString,
+        ),
+        title: Text(
+          cardTaskDescription,
         ),
       ),
     );
