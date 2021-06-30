@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/screens/task_entry_screen.dart';
 import 'package:task_manager/utilities/task.dart';
 import 'package:task_manager/utilities/tasks.dart';
+import 'package:task_manager/widgets/task_card.dart';
 
 class TasksScreen extends StatefulWidget {
   // const TasksScreen({Key? key}) : super(key: key);
@@ -24,11 +26,12 @@ class _TasksScreenState extends State<TasksScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print('new task added');
+          _navigateAndLoadNewTask(context);
         },
         child: Icon(Icons.add),
       ),
       body: SafeArea(
+        // minimum: EdgeInsets.symmetric(horizontal: 10.0),
         child: ListView.builder(
           itemCount: tasks.length,
           itemBuilder: (BuildContext context, int index) {
@@ -38,7 +41,6 @@ class _TasksScreenState extends State<TasksScreen> {
               cardStatusColor: tasks[index].statusColor(),
               isCompleted: tasks[index].isCompleted,
               completeOnPress: () {
-                print('Complete with index $index pressed');
                 setState(() {
                   tasks[index].isCompleted
                       ? tasks[index].isCompleted = false
@@ -46,7 +48,6 @@ class _TasksScreenState extends State<TasksScreen> {
                 });
               },
               deleteOnPress: () {
-                print('Delete with index $index pressed');
                 setState(() {
                   tasks.removeAt(index);
                 });
@@ -57,44 +58,21 @@ class _TasksScreenState extends State<TasksScreen> {
       ),
     );
   }
-}
 
-class TaskCard extends StatelessWidget {
-  TaskCard(
-      {required this.cardTaskDescription,
-      required this.cardDateAndTimeString,
-      required this.cardStatusColor,
-      required this.isCompleted,
-      required this.completeOnPress,
-      required this.deleteOnPress});
-
-  final Color cardStatusColor;
-  final String cardDateAndTimeString;
-  final String cardTaskDescription;
-  final bool isCompleted;
-  final void Function() completeOnPress;
-  final void Function() deleteOnPress;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: cardStatusColor,
-      child: ListTile(
-        leading: IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: deleteOnPress,
-        ),
-        trailing: IconButton(
-          icon: Icon(isCompleted ? Icons.check : Icons.check_box_outline_blank),
-          onPressed: completeOnPress,
-        ),
-        subtitle: Text(
-          cardDateAndTimeString,
-        ),
-        title: Text(
-          cardTaskDescription,
-        ),
-      ),
+  // A method that launches the task_entry screen and appends the returned
+  // task to the tasks List.
+  void _navigateAndLoadNewTask(BuildContext context) async {
+    final Task? returnedTask = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => taskEntryScreen()),
     );
+    if (returnedTask != null) {
+      print('Returned task was not null');
+      setState(() {
+        tasks.add(returnedTask);
+      });
+    } else {
+      print('returned task was null');
+    }
   }
 }
